@@ -1,0 +1,110 @@
+version: "3.2"
+
+networks:
+  frontend:
+    external: true
+  backend:
+
+services:
+  outline:
+    container_name: outline-app
+    image: docker.getoutline.com/outlinewiki/outline:latest
+    env_file: ./docker.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./outline-data:/var/lib/outline/data
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - frontend
+      - backend
+
+  redis:
+    container_name: outline-redis
+    image: redis
+    env_file: ./docker.env
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./outline-redis.conf:/redis.conf
+      - ./outline-redis-data:/data
+    command: ["redis-server", "/redis.conf"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+    networks:
+      - backend  
+
+  postgres:
+    container_name: outline-postgres
+    image: postgres
+    env_file: ./docker.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./outline-database-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'pass'
+      POSTGRES_DB: 'outline'
+    networks:
+      - backend  
+
+  keycloak:
+    container_name: keycloak-app
+    image: quay.io/keycloak/keycloak:latest
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloakdb
+      KC_DB_USERNAME: keycloakdbuser
+      KC_DB_PASSWORD: #change me
+      KEYCLOAK_ADMIN: 'admin'
+      KEYCLOAK_ADMIN_PASSWORD: #change me to a secure password
+      KC_DB_PORT: 5432
+      KEYCLOAK_DATABASE_SCHEMA: public
+      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
+      KEYCLOAK_ENABLE_STATISTICS: 'true'
+      KC_HOSTNAME: 'keycloak.domain.com'
+      KC_PROXY: edge
+      KC_PROXY_ADDRESS_FORWARDING: 'true'
+      KC_HTTP_ENABLED: 'true'
+    depends_on:
+      - key-postgres
+    networks:
+      - frontend
+      - backend
+    command: start
+
+  key-postgres:
+    image: postgres:15
+    container_name: keycloak-db
+    volumes:
+      - ./keycloak-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'keycloakdb'
+      POSTGRES_USER: 'keycloakdbuser'
+      POSTGRES_PASSWORD: #same as KC_DB_PASSWORD
+    networks:
+      - backend
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "keycloakdb", "-U", "keycloakdbuser" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
