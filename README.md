@@ -293,7 +293,6 @@ Do not fill in `Valid post logout redirect URIs` and `Web Origins`. Proceed to `
 
 24. **Optional** if you want to you can at this point fill out the SMTP section of the `docker.env` file to set up transactional emails. Invites, password resets, view codes and notifications from outline are all transactional. I'm not going over that since SMTP settings can vary by provider.
 <br>
-
 25. **shutdown** your docker-outline-keycloak stack, exit everything gracefully. <br> Then bring your stack back up,`docker compose up -d`, this will make sure that outline see's the changes to the docker.env file.
 
 26. Head to your outline instance in your web browser by going to `https://outline.domain.com`, login with the user you've just made and your good to go.
