@@ -238,8 +238,31 @@ DEVELOPMENT_UNSAFE_INLINE_CSP=false
 Email:      admin
 Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
 ```
-9. Once past the login, you will need to create a `realm` in Keycloak. 
-  
+9. Once past the login, you will need to create a `realm` in Keycloak. Click on `master` and then select `Create realm`.
+<p align="center"><img width=256 heigth=auto src=./images/admin-2.png></p>
+
+10. Don't worry about `Resource file`, in `Realm name` you will enter `outline` no caps, then select enabled to `on`. Then create the realm. 
+11. You should see a `Welcome to outline` page. Go to top left burger menu and select `Clients`, not `Client Scopes`.
+12. Please continue with the button `Create client`.<br>
+<p align="center"><img width=356 heigth=auto src=./images/admin-3.png></p>
+
+13. Make sure `Client type` is `OpenID Connect`, inside `Client ID` you're going to enter `outline`, no caps. You can fill out `Name` and `Description` if you like to. It will help if you have multiple services connecting to Keycloak going forward. Press the `Next` button. <br>
+<p align="center"><img width=556 heigth=auto src=./images/admin-4.png></p>
+
+14. On the Next screen you will toggle on `Client authentication` and make sure that `Standard flow` is enabled, leave all other options as is. Proceed with the `next` button.<br>
+<p align="center"><img width=556 heigth=auto src=./images/admin-5.png></p>
+
+15. `Root URL` will be, again assuming you have a reverse proxy up, `https://outline.domain.com/`.<br> 
+`Home URL` will be `https://outline.domain.com/`.<br>
+`Valid redirect URIs` will be `https://outline.domain.com*` make sure you have the `*`.<br>
+Do not fill in `Valid post logout redirect URIs` and `Web Origins`. Proceed to `Save`
+<p align="center"><img width=556 heigth=auto src=./images/admin-6.png></p>
+
+16. 
+
+
+
+
 
 ## Notes 
 - Change the `DB_MYSQL_PASSWORD=` to a secure password
