@@ -214,7 +214,8 @@ DEVELOPMENT_UNSAFE_INLINE_CSP=false
 
 2. After you have cloned or nested the `docker-compose.yml` and `docker.env` into a folder. We will need to edit the two files before running them. 
 <br><br>
-3. Change the following `KC_DB_PASSWORD` and `KEYCLOAK_ADMIN_PASSWORD` to secure passwords. Make sure they are **different**, you can use a terminal command `openssl rand -hex 12`
+
+3. Change the following `KC_DB_PASSWORD` and `KEYCLOAK_ADMIN_PASSWORD` to secure passwords. Make sure they are **different**, you can use a terminal command `openssl rand -hex 12` to generate a random password.
 ```yaml
       KC_DB_USERNAME: keycloakdbuser
       KC_DB_PASSWORD: #change me
@@ -223,80 +224,80 @@ DEVELOPMENT_UNSAFE_INLINE_CSP=false
 ```
 <br>
 
-5. Change the `POSTGRES_PASSWORD` tothe same password you set for `KC_DB_PASSWORD`
+4. Change the `POSTGRES_PASSWORD` to the same password you set for `KC_DB_PASSWORD`.
 ```yaml
       POSTGRES_USER: 'keycloakdbuser'
       POSTGRES_PASSWORD: #same as KC_DB_PASSWORD
 ```
-6. Change `OIDC_AUTH_URI`, `OIDC_TOKEN_URI` and `OIDC_USERINFO_URI` to the correct domain or subdomain. **leave the rest of the path alone**.
+5. Change `OIDC_AUTH_URI`, `OIDC_TOKEN_URI` and `OIDC_USERINFO_URI` to the correct domain or subdomain. **leave the rest of the path alone**.
 ```yaml
 OIDC_AUTH_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/auth
 OIDC_TOKEN_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/token
 OIDC_USERINFO_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/userinfo
 ``` 
 
-7. Change the URL to your domain to subdomain you plan to use for outline.
+6. Change the URL to your domain to subdomain you plan to use for outline.
 ```yaml
 URL=https://outline.domain.com ##change this
 PORT=3000
 ```
 
-8. Connect to the keycloak container by either going to `keycloak.yourdomain.com` or by connecting to the port `8080` at you LAN ip for admin controls. ex. `127.0.0.1:8080`
+7. Connect to the keycloak container by either going to `keycloak.yourdomain.com` or by connecting to the port `8080` at you LAN IP for admin controls. ex. `127.0.0.1:8080`
 
-9. After the login screen, you seel the `Weclome to KeyCloak` panel. Proceed to `Administration Console`
+8. After the login screen, you'll see the `Welcome to KeyCloak` panel. Proceed to `Administration Console`
 <p align="center"><img width=256px heigth=auto src=./images/admin-1.png></p>
 
-10. the login is:
+9. the login is:
 ```
 Email:      admin
 Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
 ```
 
-11. Once past the login, you will need to create a `realm` in Keycloak. Click on `master` and then select `Create realm`.
+10. Once past the login, you will need to create a `realm` in Keycloak. Click on `master` and then select `Create realm`.
 <p align="center"><img width=256 heigth=auto src=./images/admin-2.png></p>
 
-12. Don't worry about `Resource file`, in `Realm name` you will enter `outline` no caps, then select enabled to `on`. Then create the realm. 
-13. You should see a `Welcome to outline` page. Go to top left burger menu and select `Clients`, not `Client Scopes`.
-14. Please continue with the button `Create client`.<br>
+11. Don't worry about `Resource file`, in `Realm name` you will enter `outline` no caps, then select enabled to `on`. Then create the realm. 
+12. You should see a `Welcome to outline` page. Go to top left burger menu and select `Clients`, not `Client Scopes`.
+13. Please continue with the button `Create client`.<br>
 <p align="center"><img width=356 heigth=auto src=./images/admin-3.png></p>
 
-15. Make sure `Client type` is `OpenID Connect`, inside `Client ID` you're going to enter `outline`, no caps. You can fill out `Name` and `Description` if you like to. It will help if you have multiple services connecting to Keycloak going forward. Press the `Next` button. <br>
+14. Make sure `Client type` is `OpenID Connect`, inside `Client ID` you're going to enter `outline`, no caps. You can fill out `Name` and `Description` if you like to. It will help if you have multiple services connecting to Keycloak going forward. Press the `Next` button. <br>
 <p align="center"><img width=556 heigth=auto src=./images/admin-4.png></p>
 
-16. On the Next screen you will toggle on `Client authentication` and make sure that `Standard flow` is enabled, leave all other options as is. Proceed with the `next` button.<br>
+15. On the Next screen you will toggle on `Client authentication` and make sure that `Standard flow` is enabled, leave all other options as is. Proceed with the `next` button.<br>
 <p align="center"><img width=556 heigth=auto src=./images/admin-5.png></p>
 
-17. `Root URL` will be, again assuming you have a reverse proxy up, `https://outline.domain.com/`.<br> 
+16. `Root URL` will be, again assuming you have a reverse proxy up, `https://outline.domain.com/`.<br> 
 `Home URL` will be `https://outline.domain.com/`.<br>
 `Valid redirect URIs` will be `https://outline.domain.com*` make sure you have the `*`.<br>
 Do not fill in `Valid post logout redirect URIs` and `Web Origins`. Proceed to `Save`
 <p align="center"><img width=556 heigth=auto src=./images/admin-6.png></p>
 
-18. Once thats saved the page will reload and new tabs will appear. We are going to select the tab `Credentials`.
+17. Once thats saved the page will reload and new tabs will appear. We are going to select the tab `Credentials`.
 <p align="center"><img width=356 heigth=auto src=./images/admin-7.png></p>
 
-19. Copy `Client Secret` into the `docker.env`. The Secret we just copied will be pasted into `OIDC_CLIENT_SECRET=` env variable.
+18. Copy `Client Secret` into the `docker.env`. The Secret we just copied will be pasted into `OIDC_CLIENT_SECRET=` env variable.
 <p align="center"><img width=556 heigth=auto src=./images/admin-8.png></p>
 
-20. Next we are going to add a User or Users into the `realm`. Head to the side bar and locate `Users`, then select `Add user`.<br> 
+19. Next we are going to add a User or Users into the `realm`. Head to the side bar and locate `Users`, then select `Add user`.<br> 
 <p align="center"><img width=250 heigth=auto src=./images/admin-9.png></p>
 <p align="center"><img width=400 heigth=auto src=./images/admin-10.png></p>
 
-21. Filling in the following fields: `Username`, `Email`, `First name` and `Last name`. You will want to toggle on verified email for your 1st user or any user you know that has a vaild email address. Afterwords select `Create user`. <br>
+20. Filling in the following fields: `Username`, `Email`, `First name` and `Last name`. You will want to toggle on verified email for your 1st user or any user you know that has a vaild email address. Afterwords select `Create user`. <br>
 <p align="center"><img width=400 heigth=auto src=./images/admin-11.png></p>
 
-22. Once you've created the user new tabs will show up. Select `Credentials` to add a password to the user.
+21. Once you've created the user new tabs will show up. Select `Credentials` to add a password to the user.
 <p align="center"><img width=400 heigth=auto src=./images/admin-12.png></p>
 
-23. Set a password for your new user and toggle off `Temporay`, now save the password. 
+22. Set a password for your new user and toggle off `Temporay`, now save the password. 
 <p align="center"><img width=400 heigth=auto src=./images/admin-13.png></p>
 
-24. **Optional** if you want to you can at this point fill out the SMTP section of the `docker.env` file to set up transactional emails. Invites, password resets, view codes and notifications from outline are all transactional. I'm not going over that since SMTP settings can vary by provider.
+23. **Optional** if you want to you can at this point fill out the SMTP section of the `docker.env` file to set up transactional emails. Invites, password resets, view codes and notifications from outline are all transactional. I'm not going over that since SMTP settings can vary by provider.
 <br>
 
-25. **shutdown** your docker-outline-keycloak stack, exit everything gracefully. <br> Then bring your stack back up,`docker compose up -d`, this will make sure that outline see's the changes to the docker.env file.
+24. **shutdown** your docker-outline-keycloak stack, exit everything gracefully. <br> Then bring your stack back up,`docker compose up -d`, this will make sure that outline see's the changes to the docker.env file.
 
-26. Head to your outline instance in your web browser by going to `https://outline.domain.com`, login with the user you've just made and your good to go.
+25. Head to your outline instance in your web browser by going to `https://outline.domain.com`, login with the user you've just made and your good to go.
 <br><br>
 If you try to upload photos and are getting a failed message you will need to do the following command to the folder where outline is storing data.
 ```bash
