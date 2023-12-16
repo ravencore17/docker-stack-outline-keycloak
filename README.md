@@ -229,15 +229,17 @@ DEVELOPMENT_UNSAFE_INLINE_CSP=false
       POSTGRES_PASSWORD: #same as KC_DB_PASSWORD
 ```
 6. Connect to the keycloak container by either going to `keycloak.yourdomain.com` or by connecting to the port `8080` at you LAN ip for admin controls. ex. `127.0.0.1:8080`
-7. the login is:
+
+7. After the login screen, you seel the `Weclome to KeyCloak` panel. Proceed to `Administration Console`
+<p align="center"><img width=256px heigth=auto src=./images/admin-1.png></p>
+
+8. the login is:
 ```
 Email:      admin
-Password:   [KEYCLOAK_ADMIN_PASSWORD]
+Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
 ```
-<br>
-
-8. After the login screen, you seel the `Weclome to KeyCloak` panel. ``
-<p align="center"><img width=596px src=./images/admin-1.png></p>
+9. Once past the login, you will need to create a `realm` in Keycloak. 
+  
 
 ## Notes 
 - Change the `DB_MYSQL_PASSWORD=` to a secure password
