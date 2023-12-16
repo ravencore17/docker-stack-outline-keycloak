@@ -273,7 +273,7 @@ Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
 Do not fill in `Valid post logout redirect URIs` and `Web Origins`. Proceed to `Save`
 <p align="center"><img width=556 heigth=auto src=./images/admin-6.png></p>
 
-17. Once thats saved the page will reload and new tabs will appear. We are going to select the tab `Credentials`.
+17. Once that's saved the page will reload and new tabs will appear. We are going to select the tab `Credentials`.
 <p align="center"><img width=356 heigth=auto src=./images/admin-7.png></p>
 
 18. Copy `Client Secret` into the `docker.env`. The Secret we just copied will be pasted into `OIDC_CLIENT_SECRET=` env variable.
