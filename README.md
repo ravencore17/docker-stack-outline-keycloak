@@ -216,31 +216,31 @@ DEVELOPMENT_UNSAFE_INLINE_CSP=false
 <br><br>
 
 3. Change the following `KC_DB_PASSWORD` and `KEYCLOAK_ADMIN_PASSWORD` to secure passwords. Make sure they are **different**, you can use a terminal command `openssl rand -hex 12` to generate a random password.
-```yaml
+    ```yaml
       KC_DB_USERNAME: keycloakdbuser
       KC_DB_PASSWORD: #change me
       KEYCLOAK_ADMIN: 'admin'
       KEYCLOAK_ADMIN_PASSWORD: #change me to a secure password
-```
+    ```
 <br>
 
 4. Change the `POSTGRES_PASSWORD` to the same password you set for `KC_DB_PASSWORD`.
-```yaml
+    ```yaml
       POSTGRES_USER: 'keycloakdbuser'
       POSTGRES_PASSWORD: #same as KC_DB_PASSWORD
-```
+    ```
 5. Change `OIDC_AUTH_URI`, `OIDC_TOKEN_URI` and `OIDC_USERINFO_URI` to the correct domain or subdomain. **leave the rest of the path alone**.
-```yaml
-OIDC_AUTH_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/auth
-OIDC_TOKEN_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/token
-OIDC_USERINFO_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/userinfo
-``` 
+    ```yaml
+    OIDC_AUTH_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/auth
+    OIDC_TOKEN_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/token
+    OIDC_USERINFO_URI=https://keycloak.domain.com/realms/outline/protocol/openid-connect/userinfo
+    ``` 
 
 6. Change the URL to your domain to subdomain you plan to use for outline.
-```yaml
-URL=https://outline.domain.com ##change this
-PORT=3000
-```
+    ```yaml
+    URL=https://outline.domain.com ##change this
+    PORT=3000
+    ```
 
 7. Connect to the keycloak container by either going to `keycloak.yourdomain.com` or by connecting to the port `8080` at you LAN IP for admin controls. ex. `127.0.0.1:8080`
 
@@ -248,10 +248,10 @@ PORT=3000
 <p align="center"><img width=256px heigth=auto src=./images/admin-1.png></p>
 
 9. the login is:
-```
-Email:      admin
-Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
-```
+    ```
+    Email:      admin
+    Password:   [KEYCLOAK_ADMIN_PASSWORD] #from docker-compose.yml
+    ```
 
 10. Once past the login, you will need to create a `realm` in Keycloak. Click on `master` and then select `Create realm`.
 <p align="center"><img width=256 heigth=auto src=./images/admin-2.png></p>
@@ -301,10 +301,20 @@ Do not fill in `Valid post logout redirect URIs` and `Web Origins`. Proceed to `
 25. Head to your outline instance in your web browser by going to `https://outline.domain.com`, login with the user you've just made and your good to go.
 <br><br>
 If you try to upload photos and are getting a failed message you will need to do the following command to the folder where outline is storing data.
-```bash
-chown 1001 /location/on/host/filesystem/outline-data
-```
-
+    ```bash
+    chown 1001 /location/on/host/filesystem/outline-data
+    ```
+27. If you are still having problems with uploading images to your outline instance. you may need to further fix the permissions within the `Outline` app.
+Access the container shell with: 
+    ```bash
+    docker exec -u 0 -it outline-docker-compose-wk-outline-1 sh
+    ```
+    and running 
+    ```
+    chown -R nodejs:nodejs /var/lib/outline/data
+    ```
+    and then rebooting the containers allowed file uploads to proceed successfully.
+    <br><br>
 ---
 Thats it enjoy your selfhosted instance to Outline.
 
