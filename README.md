@@ -307,7 +307,7 @@ If you try to upload photos and are getting a failed message you will need to do
 27. If you are still having problems with uploading images to your outline instance. you may need to further fix the permissions within the `Outline` app.
 Access the container shell with: 
     ```bash
-    docker exec -u 0 -it outline-docker-compose-wk-outline-1 sh
+    docker exec -u 0 -it outline-app sh
     ```
     and running 
     ```
