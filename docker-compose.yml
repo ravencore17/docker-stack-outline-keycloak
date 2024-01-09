@@ -10,11 +10,8 @@ services:
     container_name: outline-app
     image: docker.getoutline.com/outlinewiki/outline:latest
     env_file: ./docker.env
-    environment:
-      - PUID=1000
-      - PGID=1000
-    ports:
-      - "3000:3000"
+#    ports:           # We will not be using ports and Nginx will take care of ports.
+#      - "3000:3000"  # We will not be using ports and Nginx will take care of ports.
     volumes:
       - ./outline-data:/var/lib/outline/data
     depends_on:
@@ -28,8 +25,8 @@ services:
     container_name: outline-redis
     image: redis
     env_file: ./docker.env
-    ports:
-      - "6379:6379"
+#    ports:           # We will not be using ports and Nginx will take care of ports.
+#      - "6379:6379"  # We will not be using ports and Nginx will take care of ports.
     volumes:
       - ./outline-redis.conf:/redis.conf
       - ./outline-redis-data:/data
@@ -46,8 +43,8 @@ services:
     container_name: outline-postgres
     image: postgres
     env_file: ./docker.env
-    ports:
-      - "5432:5432"
+#    ports:           # We will not be using ports and Nginx will take care of ports.
+#      - "5432:5432"  # We will not be using ports and Nginx will take care of ports.
     volumes:
       - ./outline-database-data:/var/lib/postgresql/data
     healthcheck:
@@ -65,9 +62,9 @@ services:
   keycloak:
     container_name: keycloak-app
     image: quay.io/keycloak/keycloak:latest
-    ports:
-      - "8080:8080"
-      - "8443:8443"
+#    ports:
+#      - "8080:8080" # We will not be using ports and Nginx will take care of ports.
+#      - "8443:8443" # We will not be using ports and Nginx will take care of ports.
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloakdb
